@@ -1,10 +1,9 @@
-import { Email } from '../Email/index.js';
+import { Email } from './Email/index.js';
 
 const renderSection = (emails, element) => {
 
   const listItemElm = emails.map((item => Email(item)));
   element.append(...listItemElm);
-
 };
 
 fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails?folder=unread`)
