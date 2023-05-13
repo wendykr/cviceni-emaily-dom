@@ -6,6 +6,7 @@ const renderSection = (emails, element) => {
     senderName: item.sender.name,
     subject: item.subject,
     time: item.time,
+    unread: item.unread,
   })));
   element.append(...listItemElm);
 };
