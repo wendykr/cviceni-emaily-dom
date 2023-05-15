@@ -41,13 +41,14 @@ export const EmailSection = (props) => {
         const listEmailElm = emails
             .map(oneEmail => Email(
             {
+                id: oneEmail.id,
                 senderName: oneEmail.sender.name,
                 subject: oneEmail.subject,
                 time: oneEmail.time,
                 unread: oneEmail.unread,
             }));
             element.querySelector('.emails').append(...listEmailElm);
-    }    
+    }
 
     return element;
 }

@@ -1,6 +1,6 @@
 export const Email = (props) => {
 
-    const { senderName, subject, time, unread } = props;
+    const { id, senderName, subject, time, unread, body } = props;
 
     const element = document.createElement('div');
     element.classList.add('email');
@@ -9,6 +9,10 @@ export const Email = (props) => {
     if (unread) {
         iconClass = 'closed';
     };
+
+    if (body) {
+        element.classList.add('email--expand');
+    }
 
     element.innerHTML = `
         <div class="email__head">
@@ -19,8 +23,41 @@ export const Email = (props) => {
             </div>
             <div class="email__time">${time}</div>
         </div>
-        <div class="email__body"></div>
+        <div class="email__body">${body}</div>
     `;
+
+    element.querySelector('.email__icon').addEventListener('click', () => {
+        if (!body) {
+            fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                element.replaceWith(
+                    Email({
+                        id: data.id,
+                        senderName: data.sender.name,
+                        subject: data.subject,
+                        time: data.time,
+                        unread: data.unread,
+                        body: data.body,
+                        })
+                );
+            });
+        } else {
+            fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails/${id}`)
+            .then((response) => response.json())
+            .then((data) => {
+                element.replaceWith(
+                    Email({
+                        id: data.id,
+                        senderName: data.sender.name,
+                        subject: data.subject,
+                        time: data.time,
+                        unread: data.unread,
+                        })
+                );
+            });
+        }
+    })
 
     return element;
 
