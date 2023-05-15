@@ -1,20 +1,28 @@
-import { Email } from './Email/index.js';
+import { EmailSection } from './EmailSection/index.js';
 
-const renderSection = (emails, element) => {
-
-  const listItemElm = emails.map((item => Email({
-    senderName: item.sender.name,
-    subject: item.subject,
-    time: item.time,
-    unread: item.unread,
-  })));
-  element.append(...listItemElm);
-};
+const appElm = document.querySelector('#app');
+const h1Elm = document.createElement('h1');
+h1Elm.textContent = 'Příchozí pošta';
+appElm.append(h1Elm);
 
 fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails?folder=unread`)
   .then((response) => response.json())
-  .then((data) => renderSection(data.emails, document.getElementById('unread')));
+  .then((data) => 
+    appElm.append(
+      EmailSection(
+        {
+          heading: "Nepřečtené",
+          emails: data.emails,
+          folder: data.emails.unread
+        })));
 
 fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails?folder=read`)
   .then((response) => response.json())
-  .then((data) => renderSection(data.emails, document.getElementById('read')));
+  .then((data) => 
+    appElm.append(
+      EmailSection(
+        {
+          heading: "Přečtené",
+          emails: data.emails,
+          folder: data.emails.unread
+        })));
