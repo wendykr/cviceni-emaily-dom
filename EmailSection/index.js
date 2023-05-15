@@ -4,6 +4,11 @@ export const EmailSection = (props) => {
 
     const { heading, emails, folder } = props;
 
+    let status = 'Načítám…';
+    if (emails !== 'loading') {
+        status = emails.status;
+    }
+
     let icon = 'unread';
     if (folder) {
         icon = 'read';
@@ -13,22 +18,36 @@ export const EmailSection = (props) => {
     element.classList.add('inbox');
 
     element.innerHTML = `
-        <section class="inbox">
-            <h2>${heading}</h2>
-            <div class="emails" id="${icon}">
-            </div>
-        </section>
+        <h2>${heading}</h2>
+        <div class="emails" id="${icon}">
+        </div>
     `;
 
-    const listEmailElm = emails
-        .map(oneEmail => Email(
-        {
-            senderName: oneEmail.sender.name,
-            subject: oneEmail.subject,
-            time: oneEmail.time,
-            unread: oneEmail.unread,
-        }));
-        element.querySelector('.emails').append(...listEmailElm);
+    if (emails === 'loading') {
+        fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails?folder=${icon}`)
+        .then((response) => response.json())
+        .then((data) => {
+            element.replaceWith(
+                EmailSection({
+                    heading: heading,
+                    emails: data.emails,
+                    folder: folder,
+                    })
+            );
+        });
+
+    } else {
+
+        const listEmailElm = emails
+            .map(oneEmail => Email(
+            {
+                senderName: oneEmail.sender.name,
+                subject: oneEmail.subject,
+                time: oneEmail.time,
+                unread: oneEmail.unread,
+            }));
+            element.querySelector('.emails').append(...listEmailElm);
+    }    
 
     return element;
 }
