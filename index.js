@@ -10,12 +10,12 @@ appElm.append(
     {
       heading: "Nepřečtené",
       emails: 'loading',
-      folder: false
+      folder: 'unread',
     }),
   EmailSection(
     { 
       heading: "Přečtené",
       emails: 'loading',
-      folder: true
+      folder: 'read',
     }),
 );

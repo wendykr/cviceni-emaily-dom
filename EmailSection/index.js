@@ -2,29 +2,28 @@ import { Email } from '../Email/index.js';
 
 export const EmailSection = (props) => {
 
-    const { heading, emails, folder } = props;
+    let { heading, emails = [], folder } = props;
 
-    let status = 'Načítám…';
+    heading = 'Načítám…';
     if (emails !== 'loading') {
-        status = emails.status;
+        if (folder === 'read') {
+            heading = 'Přečtené';
+        } else {
+            heading = 'Nepřečtené';
+        }
     }
-
-    let icon = 'unread';
-    if (folder) {
-        icon = 'read';
-    };
 
     const element = document.createElement('section');
     element.classList.add('inbox');
 
     element.innerHTML = `
         <h2>${heading}</h2>
-        <div class="emails" id="${icon}">
+        <div class="emails" id="${folder}">
         </div>
     `;
 
     if (emails === 'loading') {
-        fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails?folder=${icon}`)
+        fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails?folder=${folder}`)
         .then((response) => response.json())
         .then((data) => {
             element.replaceWith(
