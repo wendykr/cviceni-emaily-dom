@@ -43,19 +43,15 @@ export const Email = (props) => {
                 );
             });
         } else {
-            fetch(`https://apps.kodim.cz/daweb/trening-api/apis/emails/${id}`)
-            .then((response) => response.json())
-            .then((data) => {
-                element.replaceWith(
-                    Email({
-                        id: data.id,
-                        senderName: data.sender.name,
-                        subject: data.subject,
-                        time: data.time,
-                        unread: data.unread,
-                        })
-                );
-            });
+            element.replaceWith(
+                Email({
+                    id: id,
+                    senderName: senderName,
+                    subject: subject,
+                    time: time,
+                    unread: unread,
+                    })
+            );
         }
     })
 
